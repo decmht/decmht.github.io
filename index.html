@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control - Pandit, Gadde, Shrestha, Fern">
+  <meta name="description" content="decMHT: a decentralized object-centric control abstraction that lets teams of humanoid robots pick up, transport, and hand off shared objects via gripperless bimanual pinching, without inter-robot communication.">
+  <meta name="keywords" content="multi-robot systems, humanoid robots, cooperative transport, loco-manipulation, reinforcement learning, decentralized control, object-centric control">
+  <meta name="author" content="Bikram Pandit, Mohitvishnu S. Gadde, Aayam Kumar Shrestha, Alan Fern">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Bikram Pandit">
+  <meta property="og:title" content="Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control">
+  <meta property="og:description" content="decMHT: decentralized object-centric control for cooperative multi-humanoid pickup, transport, and handover.">
+  <!-- TODO: Replace with your actual project URL -->
+  <meta property="og:url" content="https://decmht.github.io">
+  <!-- TODO: Replace with your 1200x630 social preview image -->
+  <meta property="og:image" content="https://YOUR_DOMAIN.com/static/images/decmht_social_preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control - Research Preview">
+  <meta property="article:author" content="Bikram Pandit">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="multi-robot systems">
+  <meta property="article:tag" content="reinforcement learning">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- TODO: Replace with your lab/personal handle or remove -->
+  <meta name="twitter:site" content="@YOUR_TWITTER_HANDLE">
+  <!-- TODO: Replace with first author's handle or remove -->
+  <meta name="twitter:creator" content="@AUTHOR_TWITTER_HANDLE">
+  <meta name="twitter:title" content="Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control">
+  <meta name="twitter:description" content="decMHT: decentralized object-centric control for cooperative multi-humanoid pickup, transport, and handover.">
+  <!-- TODO: Match OG image -->
+  <meta name="twitter:image" content="https://YOUR_DOMAIN.com/static/images/decmht_social_preview.png">
+  <meta name="twitter:image:alt" content="Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control - Research Preview">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control">
+  <meta name="citation_author" content="Pandit, Bikram">
+  <meta name="citation_author" content="Gadde, Mohitvishnu S.">
+  <meta name="citation_author" content="Shrestha, Aayam Kumar">
+  <meta name="citation_author" content="Fern, Alan">
+  <meta name="citation_publication_date" content="2026">
+
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://documentcloud.adobe.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <title>decMHT</title>
+
+  <!-- Favicon and App Icons -->
+  <!-- TODO: Replace with a decMHT-specific favicon -->
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link rel="apple-touch-icon" href="static/images/favicon.ico">
+
+  <!-- Critical CSS -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <!-- Non-critical CSS -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- JS -->
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+
+  <!-- Structured Data: Paper -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control",
+    "description": "decMHT: a decentralized object-centric control abstraction enabling teams of humanoid robots to cooperatively pick up, transport, and hand off shared objects.",
+    "author": [
+      {
+        "@type": "Person",
+        "name": "Bikram Pandit",
+        "affiliation": { "@type": "Organization", "name": "Oregon State University" }
+      },
+      {
+        "@type": "Person",
+        "name": "Mohitvishnu S. Gadde",
+        "affiliation": { "@type": "Organization", "name": "Oregon State University" }
+      },
+      {
+        "@type": "Person",
+        "name": "Aayam Kumar Shrestha",
+        "affiliation": { "@type": "Organization", "name": "Oregon State University" }
+      },
+      {
+        "@type": "Person",
+        "name": "Alan Fern",
+        "affiliation": { "@type": "Organization", "name": "Oregon State University" }
+      }
+    ],
+    "url": "https://decmht.github.io",
+    "keywords": [
+      "multi-robot systems",
+      "humanoid robots",
+      "cooperative object transport",
+      "reinforcement learning",
+      "decentralized control",
+      "loco-manipulation"
+    ],
+    "abstract": "We study cooperative multi-humanoid pickup and transport of objects with varying size, weight, and geometry, requiring robot teams of different sizes...",
+    "isAccessibleForFree": true
+  }
+  </script>
+  <!-- TODO: Add Google Analytics tag (gtag.js) once available -->
+</head>
+<body>
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- Previous Works Dropdown -->
+  <div class="more-works-container">
+    <button class="more-works-btn" onclick="toggleMoreWorks()" title="View Previous Works">
+      <i class="fas fa-flask"></i>
+      Previous Works
+      <i class="fas fa-chevron-down dropdown-arrow"></i>
+    </button>
+    <div class="more-works-dropdown" id="moreWorksDropdown">
+      <div class="dropdown-header">
+        <h4>Previous Works</h4>
+        <button class="close-btn" onclick="toggleMoreWorks()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="works-list">
+        <a href="https://decplm.github.io/" class="work-item" target="_blank">
+          <div class="work-info">
+            <h5>Multi-Quadruped Cooperative Object Transport: Learning Decentralized Pinch-Lift-Move</h5>
+            <p>A decentralized RL framework that lets teams of quadruped-arm robots pinch, lift, and transport ungraspable objects via contact-only coordination, without communication or rigid coupling.</p>
+            <span class="work-venue">ICRA 2026</span>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        <a href="https://decmbc.github.io/" class="work-item" target="_blank">
+          <div class="work-info">
+            <h5>Learning Decentralized Multi-Biped Control for Payload Transport</h5>
+            <p>A straightforward yet highly effective decentralized approach for collaborative payload transport using multiple bipedal robots, demonstrating strong generalization in simulation and successful sim-to-real transfer.</p>
+            <span class="work-venue">CoRL 2025</span>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main-content">
+
+    <!-- HERO: Title + Authors + Links -->
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
+              <h1 class="title is-1 publication-title">
+                Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control
+              </h1>
+              <p class="is-size-5 publication-subtitle" style="margin-top:0.75rem;">
+                <span class="highlight">Dec</span>entralized <span class="highlight">M</span>ulti-<span class="highlight">H</span>umanoid <span class="no-break"><span class="highlight">T</span>ransport</span> (decMHT)
+              </p>
+              <p class="is-size-5" style="margin-top:0.75rem; padding-bottom:0.75rem;">
+                <span class="tag is-warning is-light is-medium"
+                      style="border-radius:999px; letter-spacing:0.06em; text-transform:uppercase;">
+                  Under Review
+                </span>
+              </p>
+
+              <div class="is-size-5 publication-authors">
+                <span class="author-block">
+                  <a href="https://bikcrum.com/" target="_blank">Bikram Pandit</a>,</span>
+                <span class="author-block">
+                  <a href="https://mohitgadde.github.io/" target="_blank">Mohitvishnu S. Gadde</a>,</span>
+                <span class="author-block">
+                  <a href="https://idigitopia.github.io/" target="_blank">Aayam Kumar Shrestha</a>,</span>
+                <span class="author-block">
+                  <a href="https://engineering.oregonstate.edu/people/alan-fern" target="_blank">Alan Fern</a>
+                </span>
+              </div>
+
+              <div class="is-size-5 publication-authors" style="margin-top:1rem;">
+                <span class="author-block">
+                  <a href="https://mime.engineering.oregonstate.edu/research/drl/" target="_blank">Dynamics Robotics and AI Lab (DRAIL)</a>, Oregon State University
+                </span>
+              </div>
+
+              <div class="publication-links" style="margin-top:1.5rem;">
+                <span class="link-block">
+                  <a href="static/paper.pdf" target="_blank"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper (PDF)</span>
+                  </a>
+                </span>
+
+                <!-- TODO: Add arXiv link once available -->
+                <!-- TODO: Add arXiv (HTML) link once available -->
+
+                <!-- TODO: Add Code link once the repository is public
+                <span class="link-block">
+                  <a href="https://github.com/osudrl/REPO_NAME" target="_blank"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                -->
+
+                <!-- TODO: Add Video link once available
+                <span class="link-block">
+                  <a href="https://youtu.be/VIDEO_ID" class="external-link button is-normal is-rounded is-dark" target="_blank">
+                    <span class="icon">
+                        <svg class="svg-inline--fa fa-youtube fa-w-18" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="youtube" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"></path></svg>
+                    </span>
+                    <span>Video</span>
+                  </a>
+                </span>
+                -->
+              </div>
+
+              <!-- Project TL;DR -->
+              <p class="subtitle is-5" style="margin-top:1.5rem;">
+                decMHT is a decentralized object-centric control abstraction that lets teams of humanoid robots
+                cooperatively pick up, transport, and hand off shared objects using gripperless bimanual pinching,
+                spanning single-robot pickup, multi-robot transport, and robot-to-robot handover under one policy,
+                without inter-robot communication.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIDEO -->
+    <section class="section hero is-light">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-three-fifths">
+          <!-- TODO: Replace with the teaser video (e.g. an embedded YouTube iframe like the other project pages) -->
+          <div class="publication-video" style="display:flex; align-items:center; justify-content:center; background:var(--background-accent); border:2px dashed var(--border-color); box-shadow:none;">
+            <p class="has-text-centered" style="color:var(--text-light);">
+              <i class="fas fa-video" style="font-size:2rem; display:block; margin-bottom:0.5rem;"></i>
+              Teaser video placeholder
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABSTRACT -->
+    <section class="section hero is-light">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Abstract</h2>
+            <div class="content has-text-justified">
+              <p>
+                We study cooperative multi-humanoid pickup and transport of objects with varying size, weight, and
+                geometry, requiring robot teams of different sizes. Our approach uses decentralized object-centric
+                control, where each humanoid is assigned a local attachment region on the shared object and learns
+                to realize pickup and transport through gripperless bimanual pinching. This attachment-based
+                interface provides a common control abstraction spanning single-robot pickup, cooperative
+                multi-robot transport, and robot-to-robot handover, without per-task redesign. We find that
+                policies trained only on single-robot pickup already transfer nontrivially to cooperative settings,
+                suggesting that this abstraction captures much of the structure needed for coordination. At the
+                same time, explicit multi-robot training further improves performance, showing that shared-object
+                coupling introduces coordination dynamics that are beneficial to learn directly. We validate the
+                approach in simulation across varying team sizes and object geometries, and demonstrate
+                sim-to-real transfer on hardware, where the learned controllers enable real humanoids to perform
+                cooperative manipulation tasks.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GRID SECTION -->
+    <section class="section">
+      <div class="columns is-centered is-multiline">
+        <div class="column is-three-fifths">
+          <h2 class="title is-3 has-text-centered">Decentralized <span class="no-break">Multi-Humanoid Transport</span> (decMHT)</h2>
+          <p class="content has-text-centered" style="margin-bottom:1.5rem;">
+            We train decMHT in large-scale parallel simulation and evaluate it on multi-robot teams,
+            diverse payloads, and real Digit V3 humanoid hardware.
+          </p>
+          <div class="columns is-multiline">
+            <div class="column is-half">
+              <h3 class="title is-5" style="margin-bottom: 0.75rem;">Single-Robot Pickup</h3>
+              <!-- TODO: Replace with video (e.g. static/videos/single_robot_pickup.mp4) -->
+              <div style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; background:var(--background-accent); border:2px dashed var(--border-color); border-radius: var(--border-radius);">
+                <i class="fas fa-video" style="font-size:1.5rem; color:var(--text-light);"></i>
+              </div>
+              <p class="content is-size-7" style="margin-top:0.5rem;">
+                A single humanoid learns to approach, pinch, and lift a payload using gripperless bimanual contact.
+              </p>
+            </div>
+            <div class="column is-half">
+              <h3 class="title is-5" style="margin-bottom: 0.75rem;">Multi-Robot Transport</h3>
+              <!-- TODO: Replace with video (e.g. static/videos/multi_robot_transport.mp4) -->
+              <div style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; background:var(--background-accent); border:2px dashed var(--border-color); border-radius: var(--border-radius);">
+                <i class="fas fa-video" style="font-size:1.5rem; color:var(--text-light);"></i>
+              </div>
+              <p class="content is-size-7" style="margin-top:0.5rem;">
+                The same policy scales to teams of humanoids cooperatively transporting a shared object.
+              </p>
+            </div>
+            <div class="column is-half">
+              <h3 class="title is-5" style="margin-bottom: 0.75rem;">Robot-to-Robot Handover</h3>
+              <!-- TODO: Replace with video (e.g. static/videos/robot_to_robot_handover.mp4) -->
+              <div style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; background:var(--background-accent); border:2px dashed var(--border-color); border-radius: var(--border-radius);">
+                <i class="fas fa-video" style="font-size:1.5rem; color:var(--text-light);"></i>
+              </div>
+              <p class="content is-size-7" style="margin-top:0.5rem;">
+                Humanoids hand off the payload to one another across elevation differences under the same
+                object-centric abstraction.
+              </p>
+            </div>
+            <div class="column is-half">
+              <h3 class="title is-5" style="margin-bottom: 0.75rem;">Generalization to Diverse Payloads</h3>
+              <!-- TODO: Replace with video (e.g. static/videos/generalization_diverse_payloads.mp4) -->
+              <div style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; background:var(--background-accent); border:2px dashed var(--border-color); border-radius: var(--border-radius);">
+                <i class="fas fa-video" style="font-size:1.5rem; color:var(--text-light);"></i>
+              </div>
+              <p class="content is-size-7" style="margin-top:0.5rem;">
+                A single trained controller supports teams of up to ten humanoids across diverse object
+                geometries and attachment layouts.
+              </p>
+            </div>
+            <div class="column is-half">
+              <h3 class="title is-5" style="margin-bottom: 0.75rem;">Sim-to-Real Transfer (Pickup)</h3>
+              <!-- TODO: Replace with video (e.g. static/videos/sim2real_pickup.mp4) -->
+              <div style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; background:var(--background-accent); border:2px dashed var(--border-color); border-radius: var(--border-radius);">
+                <i class="fas fa-video" style="font-size:1.5rem; color:var(--text-light);"></i>
+              </div>
+              <p class="content is-size-7" style="margin-top:0.5rem;">
+                Digit V3 humanoids execute the learned pickup policy on real hardware.
+              </p>
+            </div>
+            <div class="column is-half">
+              <h3 class="title is-5" style="margin-bottom: 0.75rem;">Sim-to-Real Transfer (Transport &amp; Handover)</h3>
+              <!-- TODO: Replace with video (e.g. static/videos/sim2real_transport_handover.mp4) -->
+              <div style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; background:var(--background-accent); border:2px dashed var(--border-color); border-radius: var(--border-radius);">
+                <i class="fas fa-video" style="font-size:1.5rem; color:var(--text-light);"></i>
+              </div>
+              <p class="content is-size-7" style="margin-top:0.5rem;">
+                Two Digit V3 humanoids cooperatively transport and hand off a shared payload using the same
+                decentralized policy.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- APPROACH -->
+    <section class="section">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Approach</h2>
+        <div class="columm">
+          <p class="subtitle has-text-centered" style="margin-top:1rem;">
+            decMHT introduces a common object-centric control abstraction that spans single-robot pickup,
+            cooperative multi-robot transport, and robot-to-robot handover under one policy.
+          </p>
+        </div>
+        <div class="content" style="margin-top:2rem; max-width:900px; margin-left:auto; margin-right:auto;">
+          <div class="columns is-multiline">
+            <div class="column is-full">
+              <h3 class="title is-4" style="margin-bottom:0.75rem;">1. Object-Centric Attachment Interface</h3>
+              <p class="content">
+                A high-level planner specifies only per-robot <strong>attachment regions</strong> on the shared
+                object and the desired object motion. An <em>attachment spec</em>, provided once at the start of a
+                manipulation episode, defines each robot's local attachment region, and an
+                <em>object-centric command</em>, provided at every timestep, specifies the desired payload motion.
+                Each robot then independently executes a local controller using only its interface inputs and
+                local proprioceptive observations&mdash;without direct inter-robot communication.
+              </p>
+            </div>
+
+            <div class="column is-full">
+              <h3 class="title is-4" style="margin-bottom:0.75rem;">2. Hierarchical Decentralized Control Architecture</h3>
+              <!-- TODO: Replace with the decMHT policy-overview figure (e.g. static/images/policy_overview.png) -->
+              <div style="text-align:center; margin:1rem 0;">
+                <div style="max-width:80%; margin:0 auto; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; background:var(--background-accent); border:2px dashed var(--border-color); border-radius: var(--border-radius);">
+                  <i class="fas fa-image" style="font-size:1.5rem; color:var(--text-light);"></i>
+                </div>
+              </div>
+              <p class="content">
+                A hierarchical decentralized control architecture, together with a training curriculum and reward
+                design, lets humanoids coordinate through the shared object using only local observations and
+                without direct communication. This unified interface generalizes across varying team sizes,
+                attachment layouts, and object geometries, while also allowing robots to join or leave the
+                manipulation task through humanoid-to-humanoid handoffs.
+              </p>
+            </div>
+
+            <div class="column is-full">
+              <h3 class="title is-4" style="margin-bottom:0.75rem;">3. Single-Robot Pretraining Transfers to Cooperative Settings</h3>
+              <p class="content">
+                Policies trained only on single-robot pickup already transfer nontrivially to cooperative
+                multi-robot settings, suggesting that the object-centric attachment abstraction captures much of
+                the structure needed for coordination. Explicit multi-robot training further improves performance,
+                showing that shared-object coupling introduces coordination dynamics that are beneficial to learn
+                directly.
+              </p>
+            </div>
+
+            <div class="column is-full">
+              <h3 class="title is-4" style="margin-bottom:0.75rem;">4. Validation in Simulation and on Hardware</h3>
+              <p class="content">
+                We validate decMHT in simulation across varying team sizes (up to ten humanoids) and diverse object
+                geometries and attachment layouts, including humanoid-to-humanoid handoffs across multiple
+                elevation differences, and demonstrate sim-to-real transfer on two Digit V3 humanoids performing
+                cooperative manipulation tasks.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Key Contributions</h2>
+        <div class="content">
+          <ul style="font-size:1.1rem; line-height:1.6;">
+
+            <li>
+              We introduce <strong>decMHT</strong>, a high-level, object-centric abstraction for multi-humanoid
+              loco-manipulation that supports variable team sizes, attachment layouts, and object geometries.
+            </li>
+
+            <li>
+              We develop a <strong>hierarchical decentralized control architecture</strong>, together with a
+              training curriculum and reward design, that enables humanoids to coordinate through the shared
+              object using only local observations and without direct communication.
+            </li>
+
+            <li>
+              We demonstrate in simulation that a <strong>single trained controller</strong> supports teams of up
+              to ten humanoids across diverse object geometries and attachment configurations, including
+              humanoid-to-humanoid handoffs across multiple elevation differences.
+            </li>
+
+            <li>
+              We demonstrate <strong>sim-to-real transfer</strong> of the approach on two Digit V3 humanoids
+              performing collaborative object manipulation.
+            </li>
+
+          </ul>
+          <p class="has-text-centered" style="margin-top:1.5rem; font-size:1rem; color:#555;">
+            For full quantitative results, ablations, and analysis, please refer to the paper.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BibTeX -->
+    <section class="section" id="BibTeX">
+      <div class="container is-max-desktop content">
+        <div class="bibtex-header">
+          <h2 class="title">BibTeX</h2>
+          <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+            <i class="fas fa-copy"></i>
+            <span class="copy-text">Copy</span>
+          </button>
+        </div>
+<pre id="bibtex-code"><code>@misc{pandit2026decmht,
+  title  = {Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control},
+  author = {Pandit, Bikram and Gadde, Mohitvishnu S. and Shrestha, Aayam Kumar and Fern, Alan},
+  year   = {2026},
+  note   = {Under review}
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-8">
+            <div class="content">
+              <p>
+                This page was built using the
+                <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">
+                  Academic Project Page Template
+                </a>
+                which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+                You are free to borrow the source code of this website; we just ask that you link back to this page in the footer. <br>
+                This website is licensed under a
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">
+                  Creative Commons Attribution-ShareAlike 4.0 International License
+                </a>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+</body>
+</html>
