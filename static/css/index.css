@@ -313,6 +313,142 @@ body {
   font-weight: 500;
 }
 
+/* Lightweight custom video carousel: one clip visible at a time, sized purely
+   with CSS (no JS-computed pixel widths), so it never overflows at any
+   viewport width and sits flush with plain single-video cards. */
+.video-carousel {
+  position: relative;
+}
+
+.video-carousel-slide {
+  display: none;
+  width: 100%;
+}
+
+.video-carousel-slide.is-active {
+  display: block;
+}
+
+.video-carousel-slide video {
+  margin: 0;
+  border-radius: var(--border-radius);
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.video-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #ffffff;
+  color: #1e293b;
+  border: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  line-height: 1;
+  z-index: 2;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+}
+
+.video-carousel-arrow:hover {
+  background: #ffffff;
+  color: var(--primary-color);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.video-carousel-prev {
+  left: 0.5rem;
+}
+
+.video-carousel-next {
+  right: 0.5rem;
+}
+
+.video-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.video-carousel-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--border-color);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.video-carousel-dot.is-active {
+  background: var(--primary-color);
+  transform: scale(1.2);
+}
+
+/* Legend explaining the on-screen overlays used across all result videos */
+.video-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  margin: 0 auto 2rem;
+  padding: 0.85rem 1.5rem;
+  max-width: 90%;
+  background: var(--background-accent);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.video-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.video-legend-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--text-primary);
+}
+
+.video-legend-disc {
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--text-secondary);
+}
+
+.video-legend-swatch {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+}
+
+.video-legend-swatch-commanded {
+  background: #10b981;
+}
+
+.video-legend-swatch-actual {
+  background: #3b82f6;
+}
+
 /* Pagination and Misc Improvements */
 .slider-pagination .slider-page {
   background: var(--primary-color);

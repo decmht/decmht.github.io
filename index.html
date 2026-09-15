@@ -74,13 +74,11 @@
   <link rel="stylesheet" href="static/css/index.css">
 
   <!-- Non-critical CSS -->
-  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
   <noscript>
-    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
     <link rel="stylesheet" href="static/css/bulma-slider.min.css">
     <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
@@ -93,7 +91,6 @@
   <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
   <script defer src="static/js/fontawesome.all.min.js"></script>
-  <script defer src="static/js/bulma-carousel.min.js"></script>
   <script defer src="static/js/bulma-slider.min.js"></script>
   <script defer src="static/js/index.js"></script>
 
@@ -139,7 +136,15 @@
     "isAccessibleForFree": true
   }
   </script>
-  <!-- TODO: Add Google Analytics tag (gtag.js) once available -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G632Z760WF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-G632Z760WF');
+  </script>
 </head>
 <body>
   <!-- Scroll to Top Button -->
@@ -191,11 +196,9 @@
           <div class="columns is-centered">
             <div class="column has-text-centered">
               <h1 class="title is-1 publication-title">
-                Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control
+                Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control<br>
+                <span class="publication-subtitle" style="font-size:1.5rem; white-space:normal;"><span class="highlight">Dec</span>entralized <span class="highlight">M</span>ulti-<span class="highlight">H</span>umanoid <span class="no-break"><span class="highlight">T</span>ransport</span> (decMHT)</span>
               </h1>
-              <p class="is-size-5 publication-subtitle" style="margin-top:0.75rem;">
-                <span class="highlight">Dec</span>entralized <span class="highlight">M</span>ulti-<span class="highlight">H</span>umanoid <span class="no-break"><span class="highlight">T</span>ransport</span> (decMHT)
-              </p>
               <p class="is-size-5" style="margin-top:0.75rem; padding-bottom:0.75rem;">
                 <span class="tag is-warning is-light is-medium"
                       style="border-radius:999px; letter-spacing:0.06em; text-transform:uppercase;">
@@ -318,72 +321,172 @@
       <div class="columns is-centered is-multiline">
         <div class="column is-three-fifths">
           <h2 class="title is-3 has-text-centered">Decentralized <span class="no-break">Multi-Humanoid Transport</span> (decMHT)</h2>
-          <p class="content has-text-centered" style="margin-bottom:1.5rem;">
+          <p class="content has-text-centered" style="margin-bottom:1rem;">
             We train decMHT in large-scale parallel simulation and evaluate it on multi-robot teams,
             diverse payloads, and real Digit V3 humanoid hardware.
           </p>
+          <div class="video-legend">
+            <div class="video-legend-item">
+              <span class="video-legend-icon">&#8596;</span>
+              <span>Horizontal arrow: linear velocity</span>
+            </div>
+            <div class="video-legend-item">
+              <span class="video-legend-icon">&#8597;</span>
+              <span>Vertical arrow: angular velocity</span>
+            </div>
+            <div class="video-legend-item">
+              <span class="video-legend-icon video-legend-disc"></span>
+              <span>Flat disc: height</span>
+            </div>
+            <div class="video-legend-item">
+              <span class="video-legend-swatch video-legend-swatch-commanded"></span>
+              <span>Commanded</span>
+            </div>
+            <div class="video-legend-item">
+              <span class="video-legend-swatch video-legend-swatch-actual"></span>
+              <span>Actual</span>
+            </div>
+          </div>
           <div class="columns is-multiline">
             <div class="column is-half">
-              <h3 class="title is-5" style="margin-bottom: 0.75rem;">Single-Robot Pickup</h3>
-              <!-- TODO: Replace with video (e.g. static/videos/single_robot_pickup.mp4) -->
-              <div style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; background:var(--background-accent); border:2px dashed var(--border-color); border-radius: var(--border-radius);">
-                <i class="fas fa-video" style="font-size:1.5rem; color:var(--text-light);"></i>
-              </div>
+              <h3 class="title is-5" style="margin-bottom: 0.15rem; min-height: 2.8rem;">Training (Simulation)</h3>
+              <video controls muted loop playsinline width="100%" preload="none" data-lazy style="border-radius: var(--border-radius);">
+                <source data-src="static/videos/2-training-sim.mp4" type="video/mp4">
+              </video>
+              <p class="content is-size-7" style="margin-top:0.5rem;">
+                decMHT is trained in IsaacLab with large-scale parallel simulation, where humanoids learn to pinch,
+                lift, and transport a shared payload through the object-centric attachment interface.
+              </p>
+            </div>
+            <div class="column is-half">
+              <h3 class="title is-5" style="margin-bottom: 0.15rem; min-height: 2.8rem;">Generalization to 2-10 Robots (Simulation)</h3>
+              <video controls muted loop playsinline width="100%" preload="none" data-lazy style="border-radius: var(--border-radius);">
+                <source data-src="static/videos/2-to-10-grid-pallets-sim.mp4" type="video/mp4">
+              </video>
+              <p class="content is-size-7" style="margin-top:0.5rem;">
+                A single trained controller supports teams of up to ten humanoids transporting shared payloads,
+                without retraining for team size.
+              </p>
+            </div>
+            <div class="column is-half">
+              <h3 class="title is-5" style="margin-bottom: 0.15rem; min-height: 2.8rem;">Single-Robot Pickup (Simulation)</h3>
+              <video controls muted loop playsinline width="100%" preload="none" data-lazy style="border-radius: var(--border-radius);">
+                <source data-src="static/videos/1-box-sim.mp4" type="video/mp4">
+              </video>
               <p class="content is-size-7" style="margin-top:0.5rem;">
                 A single humanoid learns to approach, pinch, and lift a payload using gripperless bimanual contact.
               </p>
             </div>
             <div class="column is-half">
-              <h3 class="title is-5" style="margin-bottom: 0.75rem;">Multi-Robot Transport</h3>
-              <!-- TODO: Replace with video (e.g. static/videos/multi_robot_transport.mp4) -->
-              <div style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; background:var(--background-accent); border:2px dashed var(--border-color); border-radius: var(--border-radius);">
-                <i class="fas fa-video" style="font-size:1.5rem; color:var(--text-light);"></i>
+              <h3 class="title is-5" style="margin-bottom: 0.15rem; min-height: 2.8rem;">Generalization to Diverse Payloads (Simulation)</h3>
+              <div class="video-carousel" data-carousel>
+                <div class="video-carousel-slide is-active" data-slide>
+                  <video controls muted loop playsinline width="100%" preload="none" data-lazy style="border-radius: var(--border-radius);">
+                    <source data-src="static/videos/2-cabinet-sim.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <div class="video-carousel-slide" data-slide>
+                  <video controls muted loop playsinline width="100%" preload="none" data-lazy style="border-radius: var(--border-radius);">
+                    <source data-src="static/videos/2-concrete-sim.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <div class="video-carousel-slide" data-slide>
+                  <video controls muted loop playsinline width="100%" preload="none" data-lazy style="border-radius: var(--border-radius);">
+                    <source data-src="static/videos/2-fridge-sim.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <div class="video-carousel-slide" data-slide>
+                  <video controls muted loop playsinline width="100%" preload="none" data-lazy style="border-radius: var(--border-radius);">
+                    <source data-src="static/videos/2-log-sim.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <div class="video-carousel-slide" data-slide>
+                  <video controls muted loop playsinline width="100%" preload="none" data-lazy style="border-radius: var(--border-radius);">
+                    <source data-src="static/videos/4-bed-sim.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <button type="button" class="video-carousel-arrow video-carousel-prev" aria-label="Previous clip">&#8249;</button>
+                <button type="button" class="video-carousel-arrow video-carousel-next" aria-label="Next clip">&#8250;</button>
+                <div class="video-carousel-dots">
+                  <button type="button" class="video-carousel-dot is-active" aria-label="Clip 1"></button>
+                  <button type="button" class="video-carousel-dot" aria-label="Clip 2"></button>
+                  <button type="button" class="video-carousel-dot" aria-label="Clip 3"></button>
+                  <button type="button" class="video-carousel-dot" aria-label="Clip 4"></button>
+                  <button type="button" class="video-carousel-dot" aria-label="Clip 5"></button>
+                </div>
               </div>
               <p class="content is-size-7" style="margin-top:0.5rem;">
-                The same policy scales to teams of humanoids cooperatively transporting a shared object.
+                The same policy generalizes to out-of-distribution objects, including cabinets, concrete blocks,
+                fridges, logs, and beds, with different geometries and attachment layouts.
               </p>
             </div>
             <div class="column is-half">
-              <h3 class="title is-5" style="margin-bottom: 0.75rem;">Robot-to-Robot Handover</h3>
-              <!-- TODO: Replace with video (e.g. static/videos/robot_to_robot_handover.mp4) -->
-              <div style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; background:var(--background-accent); border:2px dashed var(--border-color); border-radius: var(--border-radius);">
-                <i class="fas fa-video" style="font-size:1.5rem; color:var(--text-light);"></i>
+              <h3 class="title is-5" style="margin-bottom: 0.15rem; min-height: 2.8rem;">Robot-to-Robot Handover (Simulation)</h3>
+              <div class="video-carousel" data-carousel>
+                <div class="video-carousel-slide is-active" data-slide>
+                  <video controls muted loop playsinline width="100%" preload="none" data-lazy style="border-radius: var(--border-radius);">
+                    <source data-src="static/videos/handover-cross-level-sim.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <div class="video-carousel-slide" data-slide>
+                  <video controls muted loop playsinline width="100%" preload="none" data-lazy style="border-radius: var(--border-radius);">
+                    <source data-src="static/videos/handover-dynamic-sim.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <button type="button" class="video-carousel-arrow video-carousel-prev" aria-label="Previous clip">&#8249;</button>
+                <button type="button" class="video-carousel-arrow video-carousel-next" aria-label="Next clip">&#8250;</button>
+                <div class="video-carousel-dots">
+                  <button type="button" class="video-carousel-dot is-active" aria-label="Clip 1"></button>
+                  <button type="button" class="video-carousel-dot" aria-label="Clip 2"></button>
+                </div>
               </div>
               <p class="content is-size-7" style="margin-top:0.5rem;">
-                Humanoids hand off the payload to one another across elevation differences under the same
-                object-centric abstraction.
+                Humanoids hand off the payload to one another across multiple elevation differences and under
+                dynamic motion, all using the same object-centric abstraction.
               </p>
             </div>
             <div class="column is-half">
-              <h3 class="title is-5" style="margin-bottom: 0.75rem;">Generalization to Diverse Payloads</h3>
-              <!-- TODO: Replace with video (e.g. static/videos/generalization_diverse_payloads.mp4) -->
-              <div style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; background:var(--background-accent); border:2px dashed var(--border-color); border-radius: var(--border-radius);">
-                <i class="fas fa-video" style="font-size:1.5rem; color:var(--text-light);"></i>
-              </div>
+              <h3 class="title is-5" style="margin-bottom: 0.15rem; min-height: 2.8rem;">Single-Robot Pickup and Transport (Hardware)</h3>
+              <video controls muted loop playsinline width="100%" preload="none" data-lazy style="border-radius: var(--border-radius);">
+                <source data-src="static/videos/1-box-hardware.mp4" type="video/mp4">
+              </video>
               <p class="content is-size-7" style="margin-top:0.5rem;">
-                A single trained controller supports teams of up to ten humanoids across diverse object
-                geometries and attachment layouts.
+                A Digit V3 humanoid executes the learned pickup policy on real hardware.
               </p>
             </div>
             <div class="column is-half">
-              <h3 class="title is-5" style="margin-bottom: 0.75rem;">Sim-to-Real Transfer (Pickup)</h3>
-              <!-- TODO: Replace with video (e.g. static/videos/sim2real_pickup.mp4) -->
-              <div style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; background:var(--background-accent); border:2px dashed var(--border-color); border-radius: var(--border-radius);">
-                <i class="fas fa-video" style="font-size:1.5rem; color:var(--text-light);"></i>
+              <h3 class="title is-5" style="margin-bottom: 0.15rem; min-height: 2.8rem;">Multi-Robot Pickup and Transport (Hardware)</h3>
+              <div class="video-carousel" data-carousel>
+                <div class="video-carousel-slide is-active" data-slide>
+                  <video controls muted loop playsinline width="100%" preload="none" data-lazy style="border-radius: var(--border-radius);">
+                    <source data-src="static/videos/2-box-hardware.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <div class="video-carousel-slide" data-slide>
+                  <video controls muted loop playsinline width="100%" preload="none" data-lazy style="border-radius: var(--border-radius);">
+                    <source data-src="static/videos/2-box-long-hardware.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <button type="button" class="video-carousel-arrow video-carousel-prev" aria-label="Previous clip">&#8249;</button>
+                <button type="button" class="video-carousel-arrow video-carousel-next" aria-label="Next clip">&#8250;</button>
+                <div class="video-carousel-dots">
+                  <button type="button" class="video-carousel-dot is-active" aria-label="Clip 1"></button>
+                  <button type="button" class="video-carousel-dot" aria-label="Clip 2"></button>
+                </div>
               </div>
               <p class="content is-size-7" style="margin-top:0.5rem;">
-                Digit V3 humanoids execute the learned pickup policy on real hardware.
-              </p>
-            </div>
-            <div class="column is-half">
-              <h3 class="title is-5" style="margin-bottom: 0.75rem;">Sim-to-Real Transfer (Transport &amp; Handover)</h3>
-              <!-- TODO: Replace with video (e.g. static/videos/sim2real_transport_handover.mp4) -->
-              <div style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; background:var(--background-accent); border:2px dashed var(--border-color); border-radius: var(--border-radius);">
-                <i class="fas fa-video" style="font-size:1.5rem; color:var(--text-light);"></i>
-              </div>
-              <p class="content is-size-7" style="margin-top:0.5rem;">
-                Two Digit V3 humanoids cooperatively transport and hand off a shared payload using the same
+                Two Digit V3 humanoids cooperatively transport shared payloads of different sizes using the same
                 decentralized policy.
+              </p>
+            </div>
+            <div class="column is-half">
+              <h3 class="title is-5" style="margin-bottom: 0.15rem; min-height: 2.8rem;">Robot-to-Robot Handover (Hardware)</h3>
+              <video controls muted loop playsinline width="100%" preload="none" data-lazy style="border-radius: var(--border-radius);">
+                <source data-src="static/videos/handover-hardware.mp4" type="video/mp4">
+              </video>
+              <p class="content is-size-7" style="margin-top:0.5rem;">
+                Humanoids hand off a payload to one another on real hardware under the same object-centric
+                abstraction.
               </p>
             </div>
           </div>
@@ -406,29 +509,29 @@
             <div class="column is-full">
               <h3 class="title is-4" style="margin-bottom:0.75rem;">1. Object-Centric Attachment Interface</h3>
               <p class="content">
-                A high-level planner specifies only per-robot <strong>attachment regions</strong> on the shared
-                object and the desired object motion. An <em>attachment spec</em>, provided once at the start of a
+                Only per-robot <strong>attachment regions</strong> on the shared object and the desired object
+                motion are specified at the high level. An <em>attachment spec</em>, provided once at the start of a
                 manipulation episode, defines each robot's local attachment region, and an
                 <em>object-centric command</em>, provided at every timestep, specifies the desired payload motion.
                 Each robot then independently executes a local controller using only its interface inputs and
-                local proprioceptive observations&mdash;without direct inter-robot communication.
+                local proprioceptive observations, without direct inter-robot communication.
               </p>
             </div>
 
             <div class="column is-full">
               <h3 class="title is-4" style="margin-bottom:0.75rem;">2. Hierarchical Decentralized Control Architecture</h3>
-              <!-- TODO: Replace with the decMHT policy-overview figure (e.g. static/images/policy_overview.png) -->
               <div style="text-align:center; margin:1rem 0;">
-                <div style="max-width:80%; margin:0 auto; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; background:var(--background-accent); border:2px dashed var(--border-color); border-radius: var(--border-radius);">
-                  <i class="fas fa-image" style="font-size:1.5rem; color:var(--text-light);"></i>
-                </div>
+                <img src="static/images/lead_image_arch_only.png"
+                     alt="decMHT hierarchical policy architecture with a shared high-level and low-level controller for each humanoid"
+                     loading="lazy"
+                     style="max-width:70%; height:auto; border-radius: var(--border-radius);"/>
               </div>
               <p class="content">
                 A hierarchical decentralized control architecture, together with a training curriculum and reward
                 design, lets humanoids coordinate through the shared object using only local observations and
                 without direct communication. This unified interface generalizes across varying team sizes,
                 attachment layouts, and object geometries, while also allowing robots to join or leave the
-                manipulation task through humanoid-to-humanoid handoffs.
+                manipulation task through robot-to-robot handovers.
               </p>
             </div>
 
@@ -447,8 +550,8 @@
               <h3 class="title is-4" style="margin-bottom:0.75rem;">4. Validation in Simulation and on Hardware</h3>
               <p class="content">
                 We validate decMHT in simulation across varying team sizes (up to ten humanoids) and diverse object
-                geometries and attachment layouts, including humanoid-to-humanoid handoffs across multiple
-                elevation differences, and demonstrate sim-to-real transfer on two Digit V3 humanoids performing
+                geometries and attachment layouts, including robot-to-robot handovers across multiple
+                elevation differences, and demonstrate sim-to-real transfer on one and two Digit V3 humanoids performing
                 cooperative manipulation tasks.
               </p>
             </div>
@@ -477,11 +580,11 @@
             <li>
               We demonstrate in simulation that a <strong>single trained controller</strong> supports teams of up
               to ten humanoids across diverse object geometries and attachment configurations, including
-              humanoid-to-humanoid handoffs across multiple elevation differences.
+              robot-to-robot handovers across multiple elevation differences.
             </li>
 
             <li>
-              We demonstrate <strong>sim-to-real transfer</strong> of the approach on two Digit V3 humanoids
+              We demonstrate <strong>sim-to-real transfer</strong> of the approach on one and two Digit V3 humanoids
               performing collaborative object manipulation.
             </li>
 

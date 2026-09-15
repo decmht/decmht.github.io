@@ -90,62 +90,88 @@ window.addEventListener('scroll', function() {
     }
 });
 
-// Video carousel autoplay when in view
-function setupVideoCarouselAutoplay() {
-    const carouselVideos = document.querySelectorAll('.results-carousel video');
-    
-    if (carouselVideos.length === 0) return;
-    
+// Swap in a lazy video's real source (if not already loaded) and play it.
+function loadAndPlayVideo(video) {
+    if (!video) return;
+
+    if (video.dataset.loaded !== 'true') {
+        const source = video.querySelector('source[data-src]');
+        if (source) {
+            source.src = source.dataset.src;
+            video.load();
+            video.dataset.loaded = 'true';
+        }
+    }
+    video.play().catch(e => {
+        // Autoplay failed, probably due to browser policy
+        console.log('Autoplay prevented:', e);
+    });
+}
+
+// Lazy-load videos: only fetch a video's source (and start playing) once it
+// scrolls near the viewport, and pause it once it scrolls back out. This
+// avoids every video on the page trying to download at once on load. Videos
+// inside an inactive carousel slide (display:none) never intersect, so only
+// the currently-visible slide's video loads/plays.
+function setupLazyVideos() {
+    const videos = document.querySelectorAll('video[data-lazy]');
+
+    if (videos.length === 0) return;
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             const video = entry.target;
             if (entry.isIntersecting) {
-                // Video is in view, play it
-                video.play().catch(e => {
-                    // Autoplay failed, probably due to browser policy
-                    console.log('Autoplay prevented:', e);
-                });
+                loadAndPlayVideo(video);
             } else {
-                // Video is out of view, pause it
                 video.pause();
             }
         });
     }, {
-        threshold: 0.5 // Trigger when 50% of the video is visible
+        threshold: 0.15, // Trigger when 15% of the video is visible
+        rootMargin: '200px 0px' // Start loading slightly before it's in view
     });
-    
-    carouselVideos.forEach(video => {
+
+    videos.forEach(video => {
         observer.observe(video);
     });
 }
 
-// Autoplay all videos when scrolled into view
-function setupAllVideosAutoplay() {
-    // Get all videos except the banner video (which already has autoplay)
-    const allVideos = document.querySelectorAll('video:not([id="tree"])');
-    
-    if (allVideos.length === 0) return;
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            const video = entry.target;
-            if (entry.isIntersecting) {
-                // Video is in view, play it
-                video.play().catch(e => {
-                    // Autoplay failed, probably due to browser policy
-                    console.log('Autoplay prevented:', e);
-                });
-            } else {
-                // Video is out of view, pause it
-                video.pause();
-            }
-        });
-    }, {
-        threshold: 0.3 // Trigger when 30% of the video is visible
-    });
-    
-    allVideos.forEach(video => {
-        observer.observe(video);
+// Simple one-clip-at-a-time video carousel (prev/next + dots), sized purely
+// with CSS so it never depends on JS-computed pixel widths and can't overflow
+// at any viewport size. Replaces bulma-carousel, whose fixed-width slides
+// didn't recompute responsively and broke the mobile layout.
+function setupVideoCarousels() {
+    document.querySelectorAll('[data-carousel]').forEach(carousel => {
+        const slides = [...carousel.querySelectorAll('[data-slide]')];
+        const dots = [...carousel.querySelectorAll('.video-carousel-dot')];
+        const prevBtn = carousel.querySelector('.video-carousel-prev');
+        const nextBtn = carousel.querySelector('.video-carousel-next');
+
+        if (slides.length === 0) return;
+
+        let current = slides.findIndex(s => s.classList.contains('is-active'));
+        if (current < 0) current = 0;
+
+        function goTo(index) {
+            const next = (index + slides.length) % slides.length;
+            if (next === current) return;
+
+            slides[current].classList.remove('is-active');
+            if (dots[current]) dots[current].classList.remove('is-active');
+            const video = slides[current].querySelector('video');
+            if (video) video.pause();
+
+            current = next;
+
+            slides[current].classList.add('is-active');
+            if (dots[current]) dots[current].classList.add('is-active');
+            loadAndPlayVideo(slides[current].querySelector('video'));
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', () => goTo(current - 1));
+        if (nextBtn) nextBtn.addEventListener('click', () => goTo(current + 1));
+        dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
     });
 }
 
@@ -195,28 +221,14 @@ function setupVideoControls() {
 }
 
 $(document).ready(function() {
-    // Check for click events on the navbar burger icon
-
-    var options = {
-		slidesToScroll: 1,
-		slidesToShow: 1,
-		loop: true,
-		infinite: true,
-		autoplay: true,
-		autoplaySpeed: 5000,
-    }
-
-	// Initialize all div with carousel class
-    var carousels = bulmaCarousel.attach('.carousel', options);
-	
     bulmaSlider.attach();
-    
-    // Setup video autoplay for carousel
-    setupVideoCarouselAutoplay();
-    
-    // Setup autoplay for all videos when scrolled into view
-    setupAllVideosAutoplay();
-    
+
+    // Lazy-load and play/pause videos as they scroll into and out of view
+    setupLazyVideos();
+
+    // Wire up prev/next/dot navigation for video carousels
+    setupVideoCarousels();
+
     // Setup video controls visibility
     setupVideoControls();
 
