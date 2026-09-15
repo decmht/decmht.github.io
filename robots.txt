@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://decmht.github.io/sitemap.xml
