@@ -1,0 +1,25 @@
+# decMHT
+
+> Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control. Bikram Pandit, Mohitvishnu S. Gadde, Aayam Kumar Shrestha, Alan Fern. Under review, 2026.
+
+decMHT is a decentralized object-centric control abstraction that lets teams of humanoid robots cooperatively pick up, transport, and hand off shared objects using gripperless bimanual pinching, spanning single-robot pickup, multi-robot transport, and robot-to-robot handover under one policy, without inter-robot communication. A policy trained with at most two robots generalizes zero-shot to teams of up to ten humanoids, with sim-to-real transfer to two Digit V3 robots.
+
+## Links
+- [Paper (PDF)](https://decmht.github.io/static/paper.pdf)
+
+## Authors
+Bikram Pandit, Mohitvishnu S. Gadde, Aayam Kumar Shrestha, Alan Fern — Dynamics Robotics and AI Lab (DRAIL), Oregon State University.
+
+## Citation
+```bibtex
+@misc{pandit2026decmht,
+  title  = {Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control},
+  author = {Pandit, Bikram and Gadde, Mohitvishnu S. and Shrestha, Aayam Kumar and Fern, Alan},
+  year   = {2026},
+  note   = {Under review}
+}
+```
+
+## Related work from the same lab
+- [decPLM](https://decplm.github.io/) — Multi-Quadruped Cooperative Object Transport: Learning Decentralized Pinch-Lift-Move (ICRA 2026)
+- [decMBC](https://decmbc.github.io/) — Learning Decentralized Multi-Biped Control for Payload Transport (CoRL 2025)
