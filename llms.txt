@@ -1,11 +1,13 @@
 # decMHT
 
-> Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control. Bikram Pandit, Mohitvishnu S. Gadde, Aayam Kumar Shrestha, Alan Fern. Under review, 2026.
+> Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control. Bikram Pandit, Mohitvishnu S. Gadde, Aayam Kumar Shrestha, Alan Fern. arXiv preprint, 2026 (under review).
 
 decMHT is a decentralized object-centric control abstraction that lets teams of humanoid robots cooperatively pick up, transport, and hand off shared objects using gripperless bimanual pinching, spanning single-robot pickup, multi-robot transport, and robot-to-robot handover under one policy, without inter-robot communication. A policy trained with at most two robots generalizes zero-shot to teams of up to ten humanoids, with sim-to-real transfer to two Digit V3 robots.
 
 ## Links
-- [Paper (PDF)](https://decmht.github.io/static/paper.pdf)
+- [Paper (PDF)](https://arxiv.org/pdf/2609.17824)
+- [arXiv abstract](https://arxiv.org/abs/2609.17824)
+- [arXiv (HTML)](https://arxiv.org/html/2609.17824v1)
 
 ## Authors
 Bikram Pandit, Mohitvishnu S. Gadde, Aayam Kumar Shrestha, Alan Fern — Dynamics Robotics and AI Lab (DRAIL), Oregon State University.
@@ -13,10 +15,13 @@ Bikram Pandit, Mohitvishnu S. Gadde, Aayam Kumar Shrestha, Alan Fern — Dynamic
 ## Citation
 ```bibtex
 @misc{pandit2026decmht,
-  title  = {Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control},
-  author = {Pandit, Bikram and Gadde, Mohitvishnu S. and Shrestha, Aayam Kumar and Fern, Alan},
-  year   = {2026},
-  note   = {Under review}
+  title         = {Learning Multi-Humanoid Pickup and Transport via Decentralized Object-Centric Control},
+  author        = {Pandit, Bikram and Gadde, Mohitvishnu S. and Shrestha, Aayam Kumar and Fern, Alan},
+  year          = {2026},
+  eprint        = {2609.17824},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.RO},
+  url           = {https://arxiv.org/abs/2609.17824}
 }
 ```
 
