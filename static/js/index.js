@@ -204,46 +204,62 @@ function setupVideoCarousels() {
     });
 }
 
-// Video controls setup - hide by default on mobile, show on tap
+// Video controls setup - hide by default on mobile, show on tap, and hide
+// again either after a timeout or as soon as the user taps outside the video.
 function setupVideoControls() {
     // Check if device is mobile/touch
     const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    
+
     // Only apply hiding behavior on mobile
     if (!isMobile) {
         return; // Keep default controls visible on desktop
     }
-    
+
     const videos = document.querySelectorAll('video[controls]');
-    
+    const timeouts = new Map();
+
+    function showControls(video) {
+        clearTimeout(timeouts.get(video));
+        video.setAttribute('controls', 'controls');
+        timeouts.set(video, setTimeout(() => hideControls(video), 3000));
+    }
+
+    function hideControls(video) {
+        clearTimeout(timeouts.get(video));
+        video.removeAttribute('controls');
+    }
+
     videos.forEach(video => {
         // Hide controls initially on mobile
         video.removeAttribute('controls');
-        
-        let controlsTimeout;
-        
+
         // Show controls on tap/touch
         video.addEventListener('touchstart', function(e) {
-            clearTimeout(controlsTimeout);
-            this.setAttribute('controls', 'controls');
-            
-            // Hide again after 3 seconds
-            controlsTimeout = setTimeout(() => {
-                this.removeAttribute('controls');
-            }, 3000);
+            showControls(this);
         });
-        
+
         // Also show on click (for hybrid devices)
         video.addEventListener('click', function(e) {
             // Only handle if clicking on video itself, not controls
             if (e.target === this || e.target.tagName === 'VIDEO') {
-                clearTimeout(controlsTimeout);
-                this.setAttribute('controls', 'controls');
-                
-                // Hide again after 3 seconds
-                controlsTimeout = setTimeout(() => {
-                    this.removeAttribute('controls');
-                }, 3000);
+                showControls(this);
+            }
+        });
+    });
+
+    // Tapping anywhere outside a video hides its controls immediately,
+    // instead of waiting for the timeout.
+    document.addEventListener('touchstart', function(e) {
+        videos.forEach(video => {
+            if (video.hasAttribute('controls') && !video.contains(e.target)) {
+                hideControls(video);
+            }
+        });
+    });
+    document.addEventListener('click', function(e) {
+        videos.forEach(video => {
+            if (video.hasAttribute('controls') && !video.contains(e.target)) {
+                hideControls(video);
             }
         });
     });
