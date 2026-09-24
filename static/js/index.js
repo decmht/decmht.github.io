@@ -172,6 +172,17 @@ function setupVideoCarousels() {
         if (prevBtn) prevBtn.addEventListener('click', () => goTo(current - 1));
         if (nextBtn) nextBtn.addEventListener('click', () => goTo(current + 1));
         dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+
+        // Auto-advance to the next clip when the current one finishes, so the
+        // carousel keeps cycling instead of stopping after the first video.
+        slides.forEach((slide, i) => {
+            const video = slide.querySelector('video');
+            if (video) {
+                video.addEventListener('ended', () => {
+                    if (i === current) goTo(current + 1);
+                });
+            }
+        });
     });
 }
 
