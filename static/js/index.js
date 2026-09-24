@@ -90,50 +90,68 @@ window.addEventListener('scroll', function() {
     }
 });
 
-// Swap in a lazy video's real source (if not already loaded) and play it.
+// Swap in a lazy video's real source, if not already loaded.
+function loadVideoSource(video) {
+    if (!video || video.dataset.loaded === 'true') return;
+
+    const source = video.querySelector('source[data-src]');
+    if (source) {
+        source.src = source.dataset.src;
+        video.load();
+        video.dataset.loaded = 'true';
+    }
+}
+
+// Load (if needed) and play a video.
 function loadAndPlayVideo(video) {
     if (!video) return;
 
-    if (video.dataset.loaded !== 'true') {
-        const source = video.querySelector('source[data-src]');
-        if (source) {
-            source.src = source.dataset.src;
-            video.load();
-            video.dataset.loaded = 'true';
-        }
-    }
+    loadVideoSource(video);
     video.play().catch(e => {
         // Autoplay failed, probably due to browser policy
         console.log('Autoplay prevented:', e);
     });
 }
 
-// Lazy-load videos: only fetch a video's source (and start playing) once it
-// scrolls near the viewport, and pause it once it scrolls back out. This
-// avoids every video on the page trying to download at once on load. Videos
-// inside an inactive carousel slide (display:none) never intersect, so only
-// the currently-visible slide's video loads/plays.
+// Lazy-load videos: fetch a video's source shortly before it scrolls into
+// view, but only start playing once it is fully visible, not just partially
+// scrolled into view, and pause it as soon as it stops being fully visible.
+// This avoids every video on the page trying to download at once on load,
+// and avoids playing a video the user can only partially see. Videos inside
+// an inactive carousel slide (display:none) never intersect, so only the
+// currently-visible slide's video loads/plays.
 function setupLazyVideos() {
     const videos = document.querySelectorAll('video[data-lazy]');
 
     if (videos.length === 0) return;
 
-    const observer = new IntersectionObserver((entries) => {
+    // Preload the source a little before the video comes into view.
+    const loadObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) loadVideoSource(entry.target);
+        });
+    }, {
+        threshold: 0,
+        rootMargin: '200px 0px'
+    });
+
+    // Only play once the video is fully (not just partially) in the viewport.
+    const playObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             const video = entry.target;
-            if (entry.isIntersecting) {
+            if (entry.intersectionRatio >= 0.98) {
                 loadAndPlayVideo(video);
             } else {
                 video.pause();
             }
         });
     }, {
-        threshold: 0.15, // Trigger when 15% of the video is visible
-        rootMargin: '200px 0px' // Start loading slightly before it's in view
+        threshold: [0, 0.25, 0.5, 0.75, 0.9, 0.98, 1]
     });
 
     videos.forEach(video => {
-        observer.observe(video);
+        loadObserver.observe(video);
+        playObserver.observe(video);
     });
 }
 

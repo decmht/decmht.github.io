@@ -520,55 +520,124 @@
         </div>
         <div class="content" style="margin-top:2rem; max-width:900px; margin-left:auto; margin-right:auto;">
           <div class="columns is-multiline">
-            <div class="column is-full">
-              <h3 class="title is-4" style="margin-bottom:0.75rem;">1. Object-Centric Attachment Interface</h3>
-              <p class="content">
-                Only per-robot <strong>attachment regions</strong> on the shared object and the desired object
-                motion are specified at the high level. An <em>attachment spec</em>, provided once at the start of a
-                manipulation episode, defines each robot's local attachment region, and an
-                <em>object-centric command</em>, provided at every timestep, specifies the desired payload motion.
-                Each robot then independently executes a local controller using only its interface inputs and
-                local proprioceptive observations, without direct inter-robot communication.
-              </p>
-            </div>
 
             <div class="column is-full">
-              <h3 class="title is-4" style="margin-bottom:0.75rem;">2. Hierarchical Decentralized Control Architecture</h3>
-              <div style="text-align:center; margin:1rem 0;">
-                <img src="static/images/lead_image_arch_only.png"
-                     alt="decMHT hierarchical policy architecture with a shared high-level and low-level controller for each humanoid"
+              <h3 class="title is-4" style="margin-bottom:0.5rem;">1. Object-Centric Attachment Specification</h3>
+              <p class="content">
+                Each robot is given only a local <em>attachment spec</em>, rather than the payload's full geometry:
+                an attachment-frame pose, lateral hand-contact offsets <em>w</em>, and a frontal clearance
+                <em>d</em>. These three quantities define where a robot stands and where its hands make contact.
+                The elongated box below makes the point visually: no matter how far the payload extends, each
+                robot only ever needs its own local slice of it.
+              </p>
+              <div style="text-align:center; margin:1.25rem 0;">
+                <img src="static/images/long-box-zoom-attachment-spec.png"
+                     alt="An elongated payload with a single robot attached at one end, and a zoomed-in view of the attachment spec showing the attachment frame, hand-contact offsets w, and frontal clearance d"
                      loading="lazy"
-                     style="max-width:70%; height:auto; border-radius: var(--border-radius);"/>
+                     style="max-width:75%; height:auto; border-radius: var(--border-radius);"/>
               </div>
+            </div>
+
+            <div class="column is-full">
+              <h3 class="title is-4" style="margin-bottom:0.5rem;">2. Hierarchical Policy Architecture</h3>
               <p class="content">
-                A hierarchical decentralized control architecture, together with a training curriculum and reward
-                design, lets humanoids coordinate through the shared object using only local observations and
-                without direct communication. This unified interface generalizes across varying team sizes,
-                attachment layouts, and object geometries, while also allowing robots to join or leave the
-                manipulation task through robot-to-robot handovers.
+                decMHT uses the same two-level hierarchy as our earlier quadruped work, decPLM. A trainable
+                <strong>high-level loco-manipulation policy</strong> (2&times;128 MLP) maps the attachment spec,
+                proprioceptive state, commanded attachment-frame velocity and height, and a binary mode flag to
+                arm motor targets and a desired base velocity and height. A <strong>frozen low-level locomotion
+                policy</strong> (2&times;128 LSTM) converts that into leg motor targets. Both run at
+                50&nbsp;Hz. Every robot executes its own copy from purely local inputs, so no inter-robot
+                communication is needed.
+              </p>
+              <div style="text-align:center; margin:1.25rem 0;">
+                <img src="static/images/policy-arch.png"
+                     alt="decMHT hierarchical policy diagram: a trainable high-level loco-manipulation policy driven by the attachment specification, mode flag, and command, feeding a frozen low-level locomotion policy"
+                     loading="lazy"
+                     style="max-width:96%; height:auto; border-radius: var(--border-radius);"/>
+              </div>
+            </div>
+
+            <div class="column is-full">
+              <h3 class="title is-4" style="margin-bottom:0.5rem;">3. Mode-Gated Reward Structure</h3>
+              <p class="content">
+                One shared policy expresses two behaviors, <em>idle</em> and <em>track</em>, through a
+                <strong>mode-gated reward</strong> rather than separate networks.
+              </p>
+              <div class="columns is-multiline" style="margin-top:1.25rem;">
+                <div class="column is-half">
+                  <div style="background:#fff9e7; border:1px solid var(--border-color); border-radius:var(--border-radius); padding:1.5rem; height:100%;">
+                    <h4 class="title is-5" style="margin-bottom:0.75rem;">Idle Mode</h4>
+                    <ul style="margin-left:1.25rem;">
+                      <li>Maintain zero commanded base velocity</li>
+                      <li>Maintain nominal torso height</li>
+                      <li>Ignore payload-motion tracking commands</li>
+                      <li>Return arms to nominal rest configuration</li>
+                    </ul>
+                    <div style="text-align:center; margin-top:1rem;">
+                      <img src="static/images/gated_reward_idle_mode.png"
+                           alt="A humanoid in idle mode standing at nominal pose next to a stationary box"
+                           loading="lazy"
+                           style="max-width:32%; height:auto; mix-blend-mode:multiply;"/>
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-half">
+                  <div style="background:#f3ffef; border:1px solid var(--border-color); border-radius:var(--border-radius); padding:1.5rem; height:100%;">
+                    <h4 class="title is-5" style="margin-bottom:0.75rem;">Track Mode</h4>
+                    <ol style="margin-left:1.25rem;">
+                      <li>Approach the assigned attachment frame</li>
+                      <li>Align both hands with their contact targets</li>
+                      <li>Hold and stabilize the payload</li>
+                      <li>Track payload velocity, yaw rate, and height</li>
+                    </ol>
+                    <div style="text-align:center; margin-top:1rem;">
+                      <img src="static/images/gated_reward_track_mode.png"
+                           alt="A humanoid in track mode approaching and pushing a box along a commanded direction"
+                           loading="lazy"
+                           style="max-width:32%; height:auto; mix-blend-mode:multiply;"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="content has-text-centered" style="margin-top:1.25rem; font-weight:600; font-style:italic; color:#2f855a;">
+                "No separate handover reward or handover-specific policy."
               </p>
             </div>
 
             <div class="column is-full">
-              <h3 class="title is-4" style="margin-bottom:0.75rem;">3. Single-Robot Pretraining Transfers to Cooperative Settings</h3>
+              <h3 class="title is-4" style="margin-bottom:0.5rem;">4. Handover Through Mode Switching</h3>
               <p class="content">
-                Policies trained only on single-robot pickup already transfer nontrivially to cooperative
-                multi-robot settings, suggesting that the object-centric attachment abstraction captures much of
-                the structure needed for coordination. Explicit multi-robot training further improves performance,
-                showing that shared-object coupling introduces coordination dynamics that are beneficial to learn
-                directly.
+                Handover needs no new reward or policy, only a sequence of idle and track modes applied to both
+                robots, shown below. These mode transitions are also sampled during training, so the policy
+                experiences the coupled dynamics of a live handoff and learns robust load transfer between robots.
               </p>
+              <div style="text-align:center; margin:1.25rem 0;">
+                <img src="static/images/handover-sequence-command.png"
+                     alt="Table showing the three-phase handover sequence: holder tracks while receiver is idle, both track during support overlap, then holder goes idle while receiver tracks"
+                     loading="lazy"
+                     style="max-width:70%; height:auto; border-radius:4px;"/>
+              </div>
             </div>
 
             <div class="column is-full">
-              <h3 class="title is-4" style="margin-bottom:0.75rem;">4. Validation in Simulation and on Hardware</h3>
+              <h3 class="title is-4" style="margin-bottom:0.5rem;">5. Training</h3>
               <p class="content">
-                We validate decMHT in simulation across varying team sizes (up to ten humanoids) and diverse object
-                geometries and attachment layouts, including robot-to-robot handovers across multiple
-                elevation differences, and demonstrate sim-to-real transfer on one and two Digit V3 humanoids performing
-                cooperative manipulation tasks.
+                decMHT is trained with <strong>Independent PPO (IPPO)</strong>: a shared policy is optimized on
+                single-robot experience, then fine-tuned on two-robot experience, and deployed as independent
+                copies using only local observations. Training follows a six-stage curriculum, from assisted
+                contact through distant spawning to two-robot fine-tuning. Throughout, each robot's idle/track
+                flag is switched randomly mid-episode, exposing the policy to every transition it needs at
+                deployment, including joining, cooperating, and leaving through a handover, without any of these
+                being trained as a separate, explicit behavior.
               </p>
+              <div style="text-align:center; margin:1.25rem 0;">
+                <img src="static/images/training-curriculum-stages.png"
+                     alt="Six-stage training curriculum: assisted contact, unassisted holding, object-height tracking, full object-command tracking, distant spawning, and two-robot fine-tuning"
+                     loading="lazy"
+                     style="max-width:95%; height:auto; border-radius: var(--border-radius);"/>
+              </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -604,7 +673,8 @@
 
           </ul>
           <p class="has-text-centered" style="margin-top:1.5rem; font-size:1rem; color:#555;">
-            For full quantitative results, ablations, and analysis, please refer to the paper.
+            For full quantitative results, ablations, and analysis, please refer to the paper. Simulation and
+            hardware demonstrations of decMHT are shown in the videos above.
           </p>
         </div>
       </div>
